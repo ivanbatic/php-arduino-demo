@@ -10,7 +10,9 @@ class RedButtonListener
 {
     public function handle(InputEvent $event)
     {
-        echo 'Stopping...', PHP_EOL;
-        $event->getProcess()->signal(SIGKILL);
+        if ($event->getProcess()->isRunning()) {
+            echo 'Stopping...', PHP_EOL;
+            $event->getProcess()->signal(SIGKILL);
+        }
     }
 }
