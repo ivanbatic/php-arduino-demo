@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php
+
+use Command\ArduinoListenerCommand;
+use Listener\GreenButtonListener;
+use Listener\RedButtonListener;
+use Symfony\Component\Console\Application;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$eventDispatcher = new EventDispatcher();
+
+$redListener = new RedButtonListener();
+$eventDispatcher->addListener('red', [$redListener, 'handle']);
+
+$greenListener = new GreenButtonListener();
+$eventDispatcher->addListener('green', [$greenListener, 'handle']);
+
+$command = new ArduinoListenerCommand($eventDispatcher);
+
+$app = new Application();
+$app->add($command);
+$app->setDefaultCommand('listen');
+$app->run();
